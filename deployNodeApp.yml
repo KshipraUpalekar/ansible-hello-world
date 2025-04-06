@@ -1,7 +1,7 @@
 ---
 - name: Deploy NodeJS Web Application
   hosts: localhost
-  connection: local
+  become: yes
   tasks:
 
     - name: Install NodeJS and npm
