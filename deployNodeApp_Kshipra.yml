@@ -1,0 +1,40 @@
+---
+- name: Deploy NodeJS Web Application
+  hosts: localhost
+  connection: local
+  tasks:
+
+    - name: Install NodeJS and npm
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - nodejs
+        - npm
+
+    - name: Create app directory
+      file:
+        path: /home/devops/nodejs-app
+        state: directory
+        mode: '0755'
+
+    - name: Copy app.js file
+      copy:
+        src: nodejs-app/app.js
+        dest: /home/devops/nodejs-app/app.js
+
+    - name: Copy package.json file
+      copy:
+        src: nodejs-app/package.json
+        dest: /home/devops/nodejs-app/package.json
+
+    - name: Install NodeJS app dependencies
+      command: npm install
+      args:
+        chdir: /home/devops/nodejs-app
+
+    - name: Start NodeJS app
+      shell: nohup node app.js &
+      args:
+        chdir: /home/devops/nodejs-app
