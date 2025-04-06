@@ -1,9 +1,8 @@
 ---
 - name: Deploy NodeJS Web Application
   hosts: localhost
-  become: yes
+  become: yes   # <-- THIS LINE ENABLES SUDO
   tasks:
-
     - name: Install NodeJS and npm
       apt:
         name: "{{ item }}"
@@ -13,28 +12,13 @@
         - nodejs
         - npm
 
-    - name: Create app directory
-      file:
-        path: /home/devops/nodejs-app
-        state: directory
-        mode: '0755'
-
-    - name: Copy app.js file
-      copy:
-        src: nodejs-app/app.js
-        dest: /home/devops/nodejs-app/app.js
-
-    - name: Copy package.json file
-      copy:
-        src: nodejs-app/package.json
-        dest: /home/devops/nodejs-app/package.json
-
-    - name: Install NodeJS app dependencies
-      command: npm install
+    - name: Install dependencies
+      shell: npm install
       args:
-        chdir: /home/devops/nodejs-app
+        chdir: /mnt/c/Users/windows/my-ansible-playbooks-kshipra
 
-    - name: Start NodeJS app
+    - name: Run NodeJS App
       shell: nohup node app.js &
       args:
-        chdir: /home/devops/nodejs-app
+        chdir: /mnt/c/Users/windows/my-ansible-playbooks-kshipra
+
